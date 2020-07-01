@@ -3,6 +3,7 @@ package me.cartridge3.miraichess;
 import java.util.Scanner;
 
 import me.cartridge3.miraichess.misc.Board;
+import me.cartridge3.miraichess.misc.Direction;
 import me.cartridge3.miraichess.misc.Field;
 import me.cartridge3.miraichess.misc.GameHelper;
 import me.cartridge3.miraichess.misc.Move;
@@ -34,8 +35,6 @@ public class Miraichess {
 		Field to = Field.valueOf(stringFrom.toUpperCase());
 		
 		Move move = new Move(from, to);
-		
-		
 		
 		
 	}

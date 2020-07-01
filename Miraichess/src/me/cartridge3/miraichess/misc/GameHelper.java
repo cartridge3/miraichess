@@ -39,7 +39,6 @@ public class GameHelper {
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.WHITE), Field.G2);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.WHITE), Field.H2);
 	
-	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.A6);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.A7);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.B7);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.C7);
@@ -51,20 +50,31 @@ public class GameHelper {
 	
 	}
 	
-	public static Field ghostStraight(Piece piece, Field field, boolean forward, int times) {
+	public static Field makeGhostMove(Piece piece, Field field, Direction direction, int times) {
 		Field destination = null;
 		int[] coordinates = Miraichess.theBoard.getCoordinatesFromField(field);
 		int x = coordinates[0];
 		int y = coordinates[1];
-		if(piece.getGameColor().equals(GameColor.WHITE)) {
 		
-				if(forward) y += times; else y-= times;
-			
-		} else {
-			
-				if(forward) y -= times; else y+= times;
 		
+		switch(direction) {
+		// Straight
+		case FORWARD:	 if(piece.getGameColor().equals(GameColor.WHITE)) y += times; else  y-= times; break;  
+		case BACKWARD:	 if(piece.getGameColor().equals(GameColor.WHITE)) y -= times; else  y+= times; break;  
+		case RIGHT: 	 if(piece.getGameColor().equals(GameColor.WHITE)) x += times; else  x-= times; break;  
+		case LEFT:		 if(piece.getGameColor().equals(GameColor.WHITE)) x -= times; else  x+= times; break;
+		
+		// Diagonal
+		case NE:		x = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.RIGHT,times))[0];
+						y = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.FORWARD,times))[1];	break;			
+		case SE:		x = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.RIGHT,times))[0];
+						y = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.BACKWARD,times))[1]; break;
+		case SW:		x = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.LEFT,times))[0];
+						y = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.BACKWARD,times))[1]; break;		
+		case NW:		x = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.LEFT,times))[0];
+						y = Miraichess.theBoard.getCoordinatesFromField(makeGhostMove(piece,field,Direction.FORWARD,times))[1]; break;
 		}
+		
 		
 		coordinates[0] = x;
 		coordinates[1] = y;
@@ -77,37 +87,9 @@ public class GameHelper {
 	}
 	
 	
-	public static Field ghostLeftwards(Piece piece, Field field, int times) {
-		Field destination = null;
-		int[] coordinates = Miraichess.theBoard.getCoordinatesFromField(field);
-		int x = coordinates[0];
-		int y = coordinates[1];
-		
-		if(piece.getGameColor().equals(GameColor.WHITE)) {
-			if(x<=7-times) {
-				y -= times;
-			} else {
-				throw new ArrayIndexOutOfBoundsException();
-			}
-		} else {
-			if(y>=times) {
-				y+= times;
-			} else {
-				throw new ArrayIndexOutOfBoundsException();
-			}
-		}
-		
-		coordinates[0] = x;
-		coordinates[1] = y;
-		destination = Miraichess.theBoard.getFieldFromCoordinates(coordinates);
-		return destination;
-		
-	}
 	
 	
-	
-	
-	public static Field ghostStraight(Piece piece, Field field, boolean forward) {return ghostStraight(piece, field, forward, 1);}
+	public static Field makeGhostMove(Piece piece, Field field, Direction direction) {return makeGhostMove(piece, field, direction, 1);}
 
 	
 }
