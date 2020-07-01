@@ -34,7 +34,7 @@ public class Miraichess {
 		
 		Move move = new Move(from, to);
 		
-		System.out.println(GameHelper.ghostForward(move.getFromPiece(), from, 3).toString());
+		
 		
 	}
 	
