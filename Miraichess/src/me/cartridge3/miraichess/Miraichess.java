@@ -10,10 +10,11 @@ import me.cartridge3.miraichess.misc.Move;
 public class Miraichess {
 
 	public static Board theBoard;
-
+    public static Logger theLogger;
 	public static void main(String[] args) {
 		
 //		Initialize game.
+		theLogger = new Logger();
 		newGame();
 		
 		Scanner sc = new Scanner(System.in);
@@ -33,6 +34,7 @@ public class Miraichess {
 		Field to = Field.valueOf(stringFrom.toUpperCase());
 		
 		Move move = new Move(from, to);
+		
 		
 		
 		
