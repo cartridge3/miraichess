@@ -39,6 +39,7 @@ public class GameHelper {
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.WHITE), Field.G2);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.WHITE), Field.H2);
 	
+	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.A6);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.A7);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.B7);
 	Miraichess.theBoard.setPiece(new Pawn(GameColor.BLACK), Field.C7);
@@ -50,46 +51,47 @@ public class GameHelper {
 	
 	}
 	
-	public static Field ghostForward(Piece piece, Field field, int times) {
+	public static Field ghostStraight(Piece piece, Field field, boolean forward, int times) {
 		Field destination = null;
 		int[] coordinates = Miraichess.theBoard.getCoordinatesFromField(field);
 		int x = coordinates[0];
 		int y = coordinates[1];
 		if(piece.getGameColor().equals(GameColor.WHITE)) {
-			if(y<7-times) {
-				y += times;
-			} else {
-				throw new ArrayIndexOutOfBoundsException();
-			}
+		
+				if(forward) y += times; else y-= times;
+			
 		} else {
-			if(y>times) {
-				y-= times;
-			} else {
-				throw new ArrayIndexOutOfBoundsException();
-			}
+			
+				if(forward) y -= times; else y+= times;
+		
 		}
 		
 		coordinates[0] = x;
 		coordinates[1] = y;
-		destination = Miraichess.theBoard.getFieldFromCoordinates(coordinates);
+		try {destination = Miraichess.theBoard.getFieldFromCoordinates(coordinates);} catch(IllegalArgumentException ex) {
+			coordinates[0] = -1;
+			coordinates[1] = -1;
+			destination = Miraichess.theBoard.getFieldFromCoordinates(coordinates);
+		}
 		return destination;
-		
 	}
 	
-	public static Field ghostBackward(Piece piece, Field field, int times) {
+	
+	public static Field ghostLeftwards(Piece piece, Field field, int times) {
 		Field destination = null;
 		int[] coordinates = Miraichess.theBoard.getCoordinatesFromField(field);
 		int x = coordinates[0];
 		int y = coordinates[1];
-		if(piece.getGameColor().equals(GameColor.BLACK)) {
-			if(y<7-times) {
-				y += times;
+		
+		if(piece.getGameColor().equals(GameColor.WHITE)) {
+			if(x<=7-times) {
+				y -= times;
 			} else {
 				throw new ArrayIndexOutOfBoundsException();
 			}
 		} else {
-			if(y>times) {
-				y-= times;
+			if(y>=times) {
+				y+= times;
 			} else {
 				throw new ArrayIndexOutOfBoundsException();
 			}
@@ -105,7 +107,7 @@ public class GameHelper {
 	
 	
 	
-	public static Field ghostForward(Piece piece, Field field) {return ghostForward(piece, field, 1);}
+	public static Field ghostStraight(Piece piece, Field field, boolean forward) {return ghostStraight(piece, field, forward, 1);}
 
 	
 }
